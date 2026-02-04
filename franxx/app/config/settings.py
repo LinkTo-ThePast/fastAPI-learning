@@ -1,7 +1,10 @@
 import os
+from pathlib import Path
+from functools import lru_cache
+
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pathlib import Path
+
 
 
 def get_env_file() -> str:
@@ -66,3 +69,7 @@ class Settings(BaseSettings):
         if environment_value == "development":
             return "dev"
         return environment_value  
+
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()
