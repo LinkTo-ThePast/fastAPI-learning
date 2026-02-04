@@ -1,4 +1,6 @@
 import os
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 
 
@@ -25,7 +27,6 @@ def get_env_file() -> str:
     """
     # Stage 1: Check environment variable (highest priority)
     env = os.getenv("APP_ENVIRONMENT", "").lower()
-    print(env)
 
     # Stage 2: If not in env var, peek into .env to check if APP_ENVIRONMENT is defined there
     if not env and Path(".env").exists():
@@ -50,3 +51,16 @@ def get_env_file() -> str:
 
     # Stage 4: Fallback to .env
     return ".env"
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+		env_file=get_env_file(),
+		env_file_encoding="utf-8",
+		env_prefix="APP_",
+		case_sensitive=False,
+		extra="ignore",
+	)
+    
+    environment: str = Field(default="local", description="Environment: local, stage, dev, prod")
+    debug: bool = Field(default=True, description="Debug mode")
