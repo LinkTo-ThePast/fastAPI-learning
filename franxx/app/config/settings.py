@@ -49,6 +49,17 @@ class Settings(BaseSettings):
     
     videogame_id: str | None = Field(default=None ,description="Unique identifier for videogame.")
     
+    database_url: str = Field(default="", description="POSTGRESQL connection URL (postgresql+asyncpg://user:pass@host:port/dbname)")
+    
+    database_echo: bool = Field(default=False, description="ECHO SQL statements (for debug)")
+    
+    database_pool_size: int = Field(default=5, ge=1, le=100, description="Database connetion pool size")
+    
+    rds_ca_path: str = Field(default_factory=lambda: os.getenv("RDS_CA_PATH", ""),
+                             description="Path to RDS CA certificate")
+    
+    
+    
     @field_validator("environment")
     @classmethod
     def validate_environment(cls, environment_value: str) -> str:
