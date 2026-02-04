@@ -52,4 +52,18 @@ def get_engine() -> AsyncEngine:
         logger.info("Async engine created!")
         
     return _engine
+
+def get_session_factory() -> async_sessionmaker[AsyncSession]:
     
+    global _session_factory
+    if _session_factory is None:
+        engine = get_engine()
+        _session_factory = async_sessionmaker(
+			engine,
+			class_=AsyncSession,
+   			expire_on_commit=False,
+			autoflush=False
+		)
+    logger.debug("Async session factory created!")
+    
+    return _session_factory
