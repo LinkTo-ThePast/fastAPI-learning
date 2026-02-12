@@ -5,13 +5,15 @@ class VerificationError(Exception):
 	pass
 
 
-async def verify_identity(photo_user: bytes, whatsapp_number: str) -> bool:
+async def verify_identity(photo_user: bytes, whatsapp_number: str, is_active: bool) -> bool:
     """"""
     # 1. verify white list
     settings = get_settings()
     
+
     if not whatsapp_number:
         raise VerificationError("Whatsapp number is required when channel verification is external!")
+    
     
     
     return True
